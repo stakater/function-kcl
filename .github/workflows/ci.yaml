@@ -175,7 +175,10 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          # Use the org GHCR_TOKEN PAT (write:packages) rather than the per-repo
+          # GITHUB_TOKEN, which can't write to the pre-existing
+          # ghcr.io/stakater/compositions/xpackage/function-kcl package.
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Push Multi-Platform Package to GHCR
         run: "./crossplane --verbose xpkg push --package-files $(echo *.xpkg|tr ' ' ,) ${{ env.CROSSPLANE_REGORG }}:${{ env.XPKG_VERSION }}"
